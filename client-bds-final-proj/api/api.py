@@ -1,3 +1,4 @@
+import os
 import time
 from flask import Flask, request
 import numpy as np
@@ -6,7 +7,7 @@ from sklearn.compose import ColumnTransformer
 from sklearn.preprocessing import OneHotEncoder
 
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder='../build', static_url_path='/')
 
 @app.route('/time/', methods=['POST', 'GET'])
 def get_current_time():
@@ -39,11 +40,7 @@ def get_stroke_info():
 def pre_process_and_predict(bmi, age, hyperTension, heartDisease, avgGlucose, gender, everMarried, workType, smokingStatus, residenceType):
         test_data = [gender, age, hyperTension, heartDisease, everMarried, workType, residenceType, avgGlucose, bmi, smokingStatus]
 
-        print(test_data)
-
         test_data = np.array(test_data)
-
-        print("I am here")
 
         with open('./model/XGBoost_model.pkl', 'rb') as file:
             trained_model = joblib.load(file)
@@ -58,3 +55,5 @@ def pre_process_and_predict(bmi, age, hyperTension, heartDisease, avgGlucose, ge
         
             return {'prediction': str(round(pred[0] * 100, 4)), 'testData': str(test_data)} 
 
+if __name__ == "__main__":
+    app.run(host='0.0.0.0', debug=False, port=os.environ.get('PORT', 80))
