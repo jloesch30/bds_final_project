@@ -9,11 +9,7 @@ from sklearn.preprocessing import OneHotEncoder
 
 app = Flask(__name__, static_folder='../build', static_url_path='/')
 
-@app.route('/time/', methods=['POST', 'GET'])
-def get_current_time():
-    return {'time': time.time()}
 
-# use model to make prediction
 @app.route('/stroke/', methods=['POST'])
 def get_stroke_info():
 
@@ -44,11 +40,9 @@ def pre_process_and_predict(bmi, age, hyperTension, heartDisease, avgGlucose, ge
 
         with open('./model/XGBoost_model.pkl', 'rb') as file:
             trained_model = joblib.load(file)
-            print(trained_model)
 
             # transform
             test_data = trained_model['ct'].transform(test_data.reshape(1, -1))
-            print(test_data) 
         
             # predict
             pred = trained_model['classifier'].predict_proba(test_data)[:, 1]
