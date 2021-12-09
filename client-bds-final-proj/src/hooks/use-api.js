@@ -7,7 +7,7 @@ const useApi = () => {
 
         try {
             const response = await fetch(requestOptions.url, {
-                method: requestOptions.method ? requestOptions.method : 'POST',
+                method: requestOptions.method ? requestOptions.method : 'GET',
                 headers: requestOptions.headers ? requestOptions.headers : {},
                 body: requestOptions.body ? JSON.stringify(requestOptions.body) : null
             })

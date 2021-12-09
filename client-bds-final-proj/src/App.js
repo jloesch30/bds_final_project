@@ -10,8 +10,7 @@ function App() {
                 Below will be the findings and examples for our final project in BDS
             </p>
             <div>
-                <Form>
-                </Form>
+                <Form></Form>
             </div>
         </div>
     )

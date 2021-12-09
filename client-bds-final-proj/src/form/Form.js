@@ -1,8 +1,11 @@
 import React, { useState } from "react";
 import classes from './Form.module.css'
 import { useForm } from "react-hook-form";
+import useApi from "../hooks/use-api";
 
 function Form() {
+    const { error, sendData: getStrokeData } = useApi();
+
     const { register, handleSubmit } = useForm()
     const [bmi, setBmi] = useState()
     const [age, setAge] = useState()
@@ -11,27 +14,36 @@ function Form() {
     const [avgGlucose, setAvgGlucose] = useState()
     const [stroke, setStroke] = useState()
 
-    const saveData = (data) => {
-        console.log(data);
-        
+    const displayStrokeData = (strokeData) => {
+        console.log(strokeData)
     }
 
-    // send data to API to get 
+    const saveData = (data) => {
+
+        getStrokeData({
+            url: '/stroke/',
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json'
+            },
+            body: data
+        }, displayStrokeData)
+    }
 
     return (
         <div className={classes.container}>
             <form onSubmit={handleSubmit(data => saveData(data))}>
                 <label>BMI</label>
-                <input {...register("example")} />
+                <input {...register("bmi")} />
                 <label>Age</label>
                 <input {...register("age")} />
                 <label>Hyper Tension</label>
-                <input {...register("hypertension")} />
+                <input {...register("hyperTension")} />
                 <label>Heart Disease</label>
-                <input {...register("heart disease")} />
-                <label>BMI</label>
-                <input {...register("avg glucose")} />
-                <input type='submit' className={classes.submitButton}/>
+                <input {...register("heartDisease")} />
+                <label>Average Glucose</label>
+                <input {...register("avgGlucose")} />
+                <input type='submit' className={classes.submitButton} />
             </form>
         </div>
     )
